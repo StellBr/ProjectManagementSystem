@@ -1,0 +1,30 @@
+﻿@model WebApplication.ViewModels.Projects.EditVM 
+
+@{
+    ViewBag.Title = "Edit Project";
+}
+
+<h1>Edit Project</h1>
+<fieldset>
+    <form action="/Projects/Edit" method="post">
+        @Html.HiddenFor(m => m.Id)
+        <div class="grid">
+            <div class="row">
+                <div class="col-1">
+                    @Html.LabelFor(p => p.Title)
+                </div>
+                <div class="col-1">
+                    @Html.EditorFor(p => p.Title)
+                    @Html.ValidationMessageFor(p => p.Title)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1">
+                    <a href="/Projects/Index?">Back</a>
+                    <input type="submit" value="Edit" />
+                </div>
+            </div>
+        </div>
+    </form>
+</fieldset>
+

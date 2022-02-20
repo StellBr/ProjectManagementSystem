@@ -1,0 +1,26 @@
+﻿@model WebApplication.ViewModels.Projects.CreateVM
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h1>Create project </h1>
+<fieldset>
+    <form action="/Projects/Create" method="post">
+        <div class="col-1">
+            @Html.LabelFor(p => p.Title)
+        </div>
+        <div class="col-1">
+            @Html.EditorFor(p => p.Title)
+            @Html.ValidationMessageFor(p => p.Title)
+        </div>
+      
+        <div class="row">
+            <div class="col-1">
+                <a href="/Projects/Index?">Back</a>
+                <input type="submit" value="Create" />
+            </div>
+        </div>
+    </form>
+</fieldset>
+

@@ -1,0 +1,52 @@
+﻿@model WebApplication.ViewModels.Tasks.CreateVM
+
+@{
+    ViewBag.Title = "Create task";
+}
+
+<fieldset>
+ 
+    
+    <legend>Create task</legend>
+    <form action="/Tasks/Create" method="post">
+        @Html.HiddenFor(m => m.ProjectId)
+        <div class="grid">
+            <div class="row">
+                <div class="col-1">
+                    @Html.LabelFor(m => m.Title)
+                </div>
+                <div class="col-2">
+                    @Html.EditorFor(m => m.Title)
+                    @Html.ValidationMessageFor(m => m.Title)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1">
+                    @Html.LabelFor(m => m.Description)
+                </div>
+                <div class="col-2">
+                    @Html.EditorFor(m => m.Description)
+                    @Html.ValidationMessageFor(m => m.Title)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1">
+                    @Html.LabelFor(m => m.Deadline)
+                </div>
+                <div class="col-2">
+                    @Html.EditorFor(m => m.Deadline)
+                    @Html.ValidationMessageFor(m => m.Title)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-3">
+                    <div class="right">
+                        <a href="/Tasks/Index?ParentId=@Model.ProjectId">Back</a>
+                        <input type="submit" value="Save" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</fieldset>
+

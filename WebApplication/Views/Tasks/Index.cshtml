@@ -1,0 +1,60 @@
+﻿@model WebApplication.ViewModels.Tasks.IndexVM
+
+
+<fieldset>
+    <legend>PROJECT</legend>
+    <div class="grid">
+        <div class="row">
+            <div class="col-1 b">
+                Project Name
+            </div>
+            <div class="col-3">
+                @Model.ParentProject.Title
+            </div>
+        </div>
+    </div>
+</fieldset>
+
+<a href="/Tasks/Create?ParentId=@Model.ParentProject.Id">Add a new task</a>
+<br />
+
+<div class="grid">
+    <div class="row">
+        <div class="col-1" margin: 10px;">
+            Project Tasks
+        </div>
+        <div class="col-2">
+        </div>
+    </div>
+    <div class="row b">
+        <div class="col-1">
+            Task Title
+        </div>
+        <div class="col-3">
+            Task Description
+        </div>
+        <div class="col-2">
+            Task Deadline
+        </div>
+    </div>
+
+    @foreach (Common.Entities.Task item in Model.Items)
+    {
+        <div class="row">
+            <div class="col-1">
+                @item.Title
+            </div>
+            <div class="col-3">
+                @item.Description
+            </div>
+            <div class="col-2">
+                @item.Deadline
+            </div>
+            <div class="col-2">
+                <a href="/Tasks/Edit?id=@item.Id">edit</a>
+                <a href="/Tasks/Delete?id=@item.Id" onclick="return confirm('Delete this item?')">delete</a>
+            </div>
+        </div>
+    }
+    <a href="/Projects/Index">Back</a>
+</div>

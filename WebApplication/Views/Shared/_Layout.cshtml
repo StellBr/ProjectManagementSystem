@@ -1,0 +1,49 @@
+﻿@using Microsoft.AspNetCore.Http;
+
+<html>
+<head>
+    <title>
+        @ViewBag.Title
+    </title>
+    <link rel="stylesheet" href="/styles/site.css" />
+</head>
+<body>
+    <div class="container">
+        <div class="left">
+            <h1>Web App</h1>
+        </div>
+ 
+    </div>
+    <div class="container menu">
+        <ul>
+            <li>
+                <a href="/Home/Index">Home</a>
+            </li>
+            @if (this.ViewContext.HttpContext.Session.GetString("loggedUser") != null)
+
+            {
+                <li>
+                    <a href="/Users/Index">Users</a>
+                </li>
+                <li>
+                    <a href="/Projects/Index">Projects</a>
+                </li>
+
+                <li>
+                    <a href="/Home/Logout">Logout</a>
+                </li>
+            }
+            else
+            {
+                <li>
+                    <a href="/Home/Login">Login</a>
+                </li>
+            }
+
+        </ul>
+    </div>
+    <div class="container">
+        @RenderBody()
+    </div>
+</body>
+</html>

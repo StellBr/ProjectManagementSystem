@@ -1,0 +1,45 @@
+﻿@model WebApplication.ViewModels.Projects.ShareVM
+@using Common.Entities
+
+<hr/>
+<h2>Share @Model.Project.Title</h2> 
+<hr/>
+
+<div class="grid">
+    <form action="/Projects/Share" method="post">
+        <input type="hidden" name="ProjectId" value="@Model.Project.Id" />
+        @foreach(User item in Model.Users)
+            {
+                <div class="row">
+                    <div class="col-3">
+                        <input type="checkbox" name="UserIds" value="@item.Id"/>
+                        <span>@item.Username ( @item.FirstName , @item.LastName) </span>
+                    </div>
+                </div>
+            }
+        <div class="row">
+            <div class="col-2">
+                <input type="submit" value="Share"/>
+            </div>
+        </div>
+    </form>
+    <hr/>
+    <div class="row">
+        <div class="col-2"> Username</div>
+        <div class="col-2"> First Name</div>
+        <div class="col-2"> Last Name</div>
+        <div class="col-2">Email</div>
+    </div>
+    @foreach (UserToProject item in Model.Shares) { 
+<div class="row">
+    <div class="col-2"> @item.User.Username</div>
+    <div class="col-2"> @item.User.FirstName</div>
+    <div class="col-2"> @item.User.LastName</div>
+    <div class="col-2">@item.User.Email</div>
+    <div class="col-2">
+        <a href="/Projects/RevokeShare?id=@item.Id"
+           onclick="return confirm('Revoke Access?');">revoke</a>
+    </div>
+</div>
+    }
+</div>
