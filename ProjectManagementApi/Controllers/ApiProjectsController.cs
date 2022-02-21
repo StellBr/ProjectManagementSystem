@@ -20,7 +20,6 @@ namespace ProjectManagementApi.Controllers
         public IActionResult Get()
         {
             return Ok(repo.GetAll<int>());
-
         }
 
         [HttpGet("{ownerId}")]
@@ -39,7 +38,6 @@ namespace ProjectManagementApi.Controllers
 
             repo.Save(item);
             return Ok(item);
-
         }
 
         [HttpPost]
@@ -63,10 +61,12 @@ namespace ProjectManagementApi.Controllers
         public IActionResult Delete(int id)
         {
             Project item = repo.GetFirstOrDefault(p => p.Id == id);
+
             if(item == null)
             {
                 return NotFound();
             }
+
             repo.Delete(item);
             return Ok(item);
         }

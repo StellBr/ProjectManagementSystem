@@ -49,13 +49,13 @@ namespace WebApplication.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            Task task = new Task();
-            task.ProjectId = model.ProjectId;
-            task.Title = model.Title;
-            task.Description = model.Description;
-            task.Deadline = model.Deadline;
+            Task item = new Task();
+            item.ProjectId = model.ProjectId;
+            item.Title = model.Title;
+            item.Description = model.Description;
+            item.Deadline = model.Deadline;
 
-            repo.Save(task);
+            repo.Save(item);
 
             return RedirectToAction("Index", "Tasks", new { ParentId = model.ProjectId });
         }
@@ -66,14 +66,14 @@ namespace WebApplication.Controllers
             if (String.IsNullOrEmpty(this.HttpContext.Session.GetString("loggedUser")))
                 return RedirectToAction("Login", "Home");
 
-            Task task = repo.GetFirstOrDefault(t => t.Id == id);
+            Task item = repo.GetFirstOrDefault(t => t.Id == id);
        
             EditVM model = new EditVM();
-            model.Id = task.Id;
-            model.ProjectId = task.ProjectId;
-            model.Title = task.Title;
-            model.Description = task.Description;
-            model.Deadline = task.Deadline;
+            model.Id = item.Id;
+            model.ProjectId = item.ProjectId;
+            model.Title = item.Title;
+            model.Description = item.Description;
+            model.Deadline = item.Deadline;
 
             return View(model);
         }
@@ -84,14 +84,14 @@ namespace WebApplication.Controllers
             if (String.IsNullOrEmpty(this.HttpContext.Session.GetString("loggedUser")))
                 return RedirectToAction("Login", "Home");
 
-            Task task = new Task();
-            task.Id = model.Id;
-            task.ProjectId = model.ProjectId;
-            task.Title = model.Title;
-            task.Description = model.Description;
-            task.Deadline = model.Deadline;
+            Task item = new Task();
+            item.Id = model.Id;
+            item.ProjectId = model.ProjectId;
+            item.Title = model.Title;
+            item.Description = model.Description;
+            item.Deadline = model.Deadline;
 
-            repo.Save(task);
+            repo.Save(item);
 
             return RedirectToAction("Index","Tasks", new { ParentId = model.ProjectId });
         }
@@ -101,10 +101,10 @@ namespace WebApplication.Controllers
             if (String.IsNullOrEmpty(this.HttpContext.Session.GetString("loggedUser")))
                 return RedirectToAction("Login", "Home");
 
-            Task task = repo.GetFirstOrDefault(t => t.Id == id);
-            repo.Delete(task);  
+            Task item = repo.GetFirstOrDefault(t => t.Id == id);
+            repo.Delete(item);  
 
-            return RedirectToAction("Index", "Tasks" , new  { ParentId = task.ProjectId}); 
+            return RedirectToAction("Index", "Tasks" , new  { ParentId = item.ProjectId}); 
         }
     }
 }

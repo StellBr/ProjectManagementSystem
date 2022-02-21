@@ -16,7 +16,6 @@ namespace WebApplication.Controllers
     {
         private UsersRepository repo = new UsersRepository();
 
-     
         public IActionResult Index(IndexVM model)
         {
             if (String.IsNullOrEmpty(this.HttpContext.Session.GetString("loggedUser")))
@@ -37,6 +36,7 @@ namespace WebApplication.Controllers
         {
             if (String.IsNullOrEmpty(this.HttpContext.Session.GetString("loggedUser")))
                 return RedirectToAction("Login", "Home");
+
             return View();
         }
 
@@ -49,16 +49,16 @@ namespace WebApplication.Controllers
                 return View(model);
             }
 
-            User user = new User();
-            user.Username = model.Username;
-            user.Password = model.Password;
-            user.FirstName = model.FirstName;
-            user.LastName = model.LastName;
-            user.Email = model.Email;
-            user.Phone = model.Phone;
-            user.Address = model.Address;
+            User item = new User();
+            item.Username = model.Username;
+            item.Password = model.Password;
+            item.FirstName = model.FirstName;
+            item.LastName = model.LastName;
+            item.Email = model.Email;
+            item.Phone = model.Phone;
+            item.Address = model.Address;
 
-            repo.Save(user);
+            repo.Save(item);
       
             return RedirectToAction("Index","Users");
         }
@@ -69,17 +69,17 @@ namespace WebApplication.Controllers
             if (String.IsNullOrEmpty(this.HttpContext.Session.GetString("loggedUser")))
                 return RedirectToAction("Login", "Home");
 
-            User user = repo.GetFirstOrDefault(u => u.Id ==id);
+            User item = repo.GetFirstOrDefault(u => u.Id ==id);
 
             EditVM model = new EditVM();
-            model.Id = user.Id;
-            model.Username = user.Username;
-            model.Password = user.Password;
-            model.FirstName = user.FirstName;
-            model.LastName = user.LastName;
-            model.Email = user.Email;
-            model.Phone = user.Phone;
-            model.Address = user.Address;
+            model.Id = item.Id;
+            model.Username = item.Username;
+            model.Password = item.Password;
+            model.FirstName = item.FirstName;
+            model.LastName = item.LastName;
+            model.Email = item.Email;
+            model.Phone = item.Phone;
+            model.Address = item.Address;
 
             return View(model);
         }
@@ -90,17 +90,17 @@ namespace WebApplication.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            User user = new User();
-            user.Id = model.Id;
-            user.Username = model.Username;
-            user.Password = model.Password;
-            user.FirstName = model.FirstName;
-            user.LastName = model.LastName;
-            user.Email = model.Email;
-            user.Phone = model.Phone;
-            user.Address = model.Address;
+            User item = new User();
+            item.Id = model.Id;
+            item.Username = model.Username;
+            item.Password = model.Password;
+            item.FirstName = model.FirstName;
+            item.LastName = model.LastName;
+            item.Email = model.Email;
+            item.Phone = model.Phone;
+            item.Address = model.Address;
 
-            repo.Save(user);
+            repo.Save(item);
 
             return RedirectToAction("Index","Users");
         }

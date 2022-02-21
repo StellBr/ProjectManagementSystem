@@ -8,7 +8,7 @@ namespace WebApplication.ViewModels.Projects
 {
     public class IndexVM
     {
-       public List<Project> Items { get; set; }
+        public List<Project> Items { get; set; }
         public List<Project> sharedItems { get; set; }
 
         public int Page { get; set; }

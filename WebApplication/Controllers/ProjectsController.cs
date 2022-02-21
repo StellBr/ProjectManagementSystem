@@ -28,8 +28,8 @@ namespace WebApplication.Controllers
 
              model.Items = repo.GetAll<int>(i=>i.OwnerId==loggedUserId, null, model.Page, model.ItemsPerPage);
 
-            model.Items.AddRange(upRepo.GetAll<int>(i => i.UserId == loggedUserId)
-                                        .Select(i => i.Project));         
+             model.Items.AddRange(upRepo.GetAll<int>(i => i.UserId == loggedUserId)
+                                       .Select(i => i.Project));         
             return View(model);
         }
 
@@ -52,13 +52,14 @@ namespace WebApplication.Controllers
             {
                 return View(model);
             }
+
             int loggedUserId = Convert.ToInt32(this.HttpContext.Session.GetString("loggedUser"));
 
-            Project project = new Project();
-            project.Title = model.Title;
-            project.OwnerId = loggedUserId;
+            Project item = new Project();
+            item.Title = model.Title;
+            item.OwnerId = loggedUserId;
 
-            repo.Save(project);
+            repo.Save(item);
 
             return RedirectToAction("Index", "Projects");
         }
@@ -69,14 +70,13 @@ namespace WebApplication.Controllers
             if (String.IsNullOrEmpty(this.HttpContext.Session.GetString("loggedUser")))
                 return RedirectToAction("Login", "Home");
 
-            Project project = repo.GetFirstOrDefault(u => u.Id == id);
+            Project item = repo.GetFirstOrDefault(u => u.Id == id);
 
             EditVM model = new EditVM();
-            model.Title = project.Title;
+            model.Title = item.Title;
 
             return View(model);
         }
-
 
         [HttpPost]
         public IActionResult Edit(EditVM model)
@@ -91,12 +91,12 @@ namespace WebApplication.Controllers
                 return View(model);
             }                 
 
-            Project project = repo.GetFirstOrDefault(u => u.Id == model.Id);
-            project.Id = model.Id;
-            project.OwnerId = loggedUserId;
-            project.Title = model.Title;
+            Project item = repo.GetFirstOrDefault(u => u.Id == model.Id);
+            item.Id = model.Id;
+            item.OwnerId = loggedUserId;
+            item.Title = model.Title;
        
-            repo.Save(project);
+            repo.Save(item);
 
             return RedirectToAction("Index", "Projects");
         }
@@ -104,12 +104,12 @@ namespace WebApplication.Controllers
         public IActionResult Delete(int id)
         {  
          
-            Project project = repo.GetFirstOrDefault(u => u.Id == id);
-            repo.Delete(project);
-
+            Project item = repo.GetFirstOrDefault(u => u.Id == id);
+            repo.Delete(item);
 
             return RedirectToAction("Index", "Projects");
         }
+
         [HttpGet]
         public IActionResult Share(int Id)
         {
@@ -118,7 +118,9 @@ namespace WebApplication.Controllers
           
             model.Shares = upRepo.GetAll<int>(i => i.ProjectId == Id);
 
-            List<int> usersSharedList = model.Shares.Select(i => i.UserId).ToList();
+            List<int> usersSharedList = model.Shares
+                                                    .Select(i => i.UserId)
+                                                    .ToList();
             usersSharedList.Add(model.Project.OwnerId);
 
             UsersRepository uRepo = new UsersRepository();
@@ -146,6 +148,7 @@ namespace WebApplication.Controllers
         {
             UserToProject item = upRepo.GetFirstOrDefault(i => i.Id == id);
             upRepo.Delete(item);
+
             return RedirectToAction("Share", "Projects", new { Id = item.ProjectId });
         }
     }

@@ -15,8 +15,6 @@ namespace WebApplication.Controllers
 {
     public class HomeController : Controller
     {
-      
-
         public IActionResult Index()
         {
             return View();
@@ -34,13 +32,9 @@ namespace WebApplication.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            /*MyDbContext context = new MyDbContext();
-            User loggedUser = context.Users.Where(u => u.Username == model.Username &&
-                                                        u.Password == model.Password)
-                                            .FirstOrDefault();*/
             UsersRepository repo = new UsersRepository();
             User loggedUser = repo.GetFirstOrDefault(u => u.Username == model.Username &&
-                                                        u.Password == model.Password);
+                                                          u.Password == model.Password);
 
             if (loggedUser == null)
             {
@@ -52,6 +46,7 @@ namespace WebApplication.Controllers
 
             return RedirectToAction("Index","Home");
         }
+
         public IActionResult Logout()
         {
             if (String.IsNullOrEmpty(this.HttpContext.Session.GetString("loggedUser")))
@@ -61,6 +56,5 @@ namespace WebApplication.Controllers
 
             return RedirectToAction("Index", "Home");
         }
-
     }
 }

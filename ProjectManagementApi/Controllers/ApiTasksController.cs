@@ -2,6 +2,7 @@
 using Common.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ProjectManagementApi.ViewModels.ApiTasks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,10 +29,30 @@ namespace ProjectManagementApi.Controllers
         }
 
         [HttpPut]
-        public IActionResult Put([FromBody] Task model)
+        public IActionResult Put([FromBody] CreateVM model)
         {
-            repo.Save(model);
-            return Created(model.Id.ToString(), model);
+            Task item = new Task();
+
+            item.ProjectId = model.ProjectId;
+            item.Title = model.Title;
+            item.Description = model.Description;
+            item.Deadline = model.Deadline;
+
+            repo.Save(item);
+            return Ok(item);
+        }
+
+        [HttpPost]
+        public IActionResult Post([FromBody] EditVM model)
+        {
+            Task item = repo.GetFirstOrDefault(i => i.Id == model.Id);
+
+            item.Title = model.Title;
+            item.Description = model.Description;
+            item.Deadline = model.Deadline;
+
+            repo.Save(item);
+            return Ok(item);
         }
 
         [HttpDelete("{id}")]

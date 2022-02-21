@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Common.Entities
 {
-    public class Project:BaseEntity
+    public class Project : BaseEntity
     {
         public int OwnerId { get; set; }
         public string Title { get; set; }
