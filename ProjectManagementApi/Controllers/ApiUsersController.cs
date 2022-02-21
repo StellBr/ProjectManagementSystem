@@ -80,15 +80,15 @@ namespace ProjectManagementApi.Controllers
         [HttpDelete("{id}")]
         public  IActionResult Delete(int id)
         {
-            User user = repo.GetFirstOrDefault(u => u.Id == id);
+            User item = repo.GetFirstOrDefault(u => u.Id == id);
 
-            if(user == null)
+            if(item == null)
             {
                 return NotFound();
             }
 
-            repo.Delete(user);
-            return Ok(user);
+            repo.Delete(item);
+            return Ok(item);
         }
     }
 }

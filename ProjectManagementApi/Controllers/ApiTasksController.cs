@@ -58,9 +58,9 @@ namespace ProjectManagementApi.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            Task task = repo.GetFirstOrDefault(t => t.Id == id);
-            repo.Delete(task);
-            return Ok(task);
+            Task item = repo.GetFirstOrDefault(t => t.Id == id);
+            repo.Delete(item);
+            return Ok(item);
         }
     }
 }
