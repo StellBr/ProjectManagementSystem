@@ -9,24 +9,33 @@ using Common.Data;
 using Common.Entities;
 using Common.Repositories;
 using WebApplication.ViewModels.Users;
+using WebApplication.ActionFilters;
+using WebApplication.ViewModels.Shared;
 
 namespace WebApplication.Controllers
 {
+    [Authentication]
     public class UsersController : Controller
     {
         private UsersRepository repo = new UsersRepository();
 
         public IActionResult Index(IndexVM model)
         {
-            if (String.IsNullOrEmpty(this.HttpContext.Session.GetString("loggedUser")))
-                return RedirectToAction("Login", "Home");
+             model.Filter ??= new FilterVM();
+             model.Pager  ??= new PagerVM();
 
-             model.ItemsPerPage = model.ItemsPerPage <= 0 ? 10 : model.ItemsPerPage;
-             model.Page = model.Page <= 0 ? 1 : model.Page;
-             model.PagesCount = (int)Math.Ceiling(repo.Count() / (double)model.ItemsPerPage);
+             model.Pager.ItemsPerPage = model.Pager.ItemsPerPage <= 0 
+                                         ? 10 
+                                         : model.Pager.ItemsPerPage;
+             model.Pager.Page = model.Pager.Page <= 0 
+                                         ? 1 
+                                         : model.Pager.Page;
+
+            var filter = model.Filter.GetFilter();
+
+             model.Pager.PagesCount = (int)Math.Ceiling(repo.Count(filter) / (double)model.Pager.ItemsPerPage);
  
-
-             model.Items = repo.GetAll<int>(null,null,model.Page,model.ItemsPerPage);
+             model.Items = repo.GetAll<int>(filter, null,model.Pager.Page,model.Pager.ItemsPerPage);
             
             return View(model);
         }
@@ -34,9 +43,6 @@ namespace WebApplication.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            if (String.IsNullOrEmpty(this.HttpContext.Session.GetString("loggedUser")))
-                return RedirectToAction("Login", "Home");
-
             return View();
         }
 
@@ -66,8 +72,7 @@ namespace WebApplication.Controllers
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            if (String.IsNullOrEmpty(this.HttpContext.Session.GetString("loggedUser")))
-                return RedirectToAction("Login", "Home");
+            return RedirectToAction("Login", "Home");
 
             User item = repo.GetFirstOrDefault(u => u.Id ==id);
 
@@ -107,9 +112,7 @@ namespace WebApplication.Controllers
 
         public IActionResult Delete (int id)
         {
-            if (String.IsNullOrEmpty(this.HttpContext.Session.GetString("loggedUser")))
-                return RedirectToAction("Login", "Home");
-          
+           
             User user = repo.GetFirstOrDefault(u => u.Id == id);
             repo.Delete(user);
 

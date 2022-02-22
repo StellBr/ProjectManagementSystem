@@ -19,6 +19,29 @@ namespace Common.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.0");
 
+            modelBuilder.Entity("Common.Entities.Comment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TaskId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Topic")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TaskId");
+
+                    b.ToTable("Comments");
+                });
+
             modelBuilder.Entity("Common.Entities.Project", b =>
                 {
                     b.Property<int>("Id")
@@ -131,6 +154,17 @@ namespace Common.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("UserToProjects");
+                });
+
+            modelBuilder.Entity("Common.Entities.Comment", b =>
+                {
+                    b.HasOne("Common.Entities.Task", "Task")
+                        .WithMany()
+                        .HasForeignKey("TaskId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Task");
                 });
 
             modelBuilder.Entity("Common.Entities.Project", b =>

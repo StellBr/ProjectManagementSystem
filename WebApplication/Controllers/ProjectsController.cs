@@ -8,46 +8,47 @@ using Common.Data;
 using Common.Entities;
 using Common.Repositories;
 using WebApplication.ViewModels.Projects;
+using WebApplication.ActionFilters;
+using WebApplication.ViewModels.Shared;
 
 namespace WebApplication.Controllers
 {
+    [Authentication]
     public class ProjectsController : Controller
     {
         private ProjectsRepository repo = new ProjectsRepository();
         private UserToProjectsRepository upRepo = new UserToProjectsRepository();
         public IActionResult Index(IndexVM model)
         {
-            if (String.IsNullOrEmpty(this.HttpContext.Session.GetString("loggedUser")))
-                return RedirectToAction("Login", "Home");
-
             int loggedUserId = Convert.ToInt32(this.HttpContext.Session.GetString("loggedUser"));
 
-             model.ItemsPerPage = model.ItemsPerPage <= 0 ? 5 : model.ItemsPerPage;
-             model.Page = model.Page <= 0 ? 1 : model.Page;
-             model.PagesCount = (int) Math.Ceiling(repo.Count(null) / (double)model.ItemsPerPage);
+             model.Pager ??= new PagerVM();
 
-             model.Items = repo.GetAll<int>(i=>i.OwnerId==loggedUserId, null, model.Page, model.ItemsPerPage);
+             model.Pager.ItemsPerPage = model.Pager.ItemsPerPage <= 0 
+                                                                    ? 5
+                                                                    : model.Pager.ItemsPerPage;
+             model.Pager.Page = model.Pager.Page <= 0 
+                                                    ? 1 
+                                                    : model.Pager.Page;
+
+             model.Pager.PagesCount = (int) Math.Ceiling(repo.Count(i=>i.OwnerId == loggedUserId) / (double)model.Pager.ItemsPerPage);
+
+             model.Items = repo.GetAll<int>(i=>i.OwnerId==loggedUserId, null, model.Pager.Page, model.Pager.ItemsPerPage);
 
              model.Items.AddRange(upRepo.GetAll<int>(i => i.UserId == loggedUserId)
-                                       .Select(i => i.Project));         
-            return View(model);
+                                        .Select(i => i.Project));         
+             return View(model);
         }
 
         [HttpGet]
         public IActionResult Create()
         {
-            if (String.IsNullOrEmpty(this.HttpContext.Session.GetString("loggedUser")))
-                return RedirectToAction("Login", "Home");
-
             return View();
         }
 
         [HttpPost]
        public IActionResult Create(CreateVM model)
         {
-            if (String.IsNullOrEmpty(this.HttpContext.Session.GetString("loggedUser")))
-                return RedirectToAction("Login", "Home");
-
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -67,9 +68,6 @@ namespace WebApplication.Controllers
         [HttpGet]
         public IActionResult Edit(int id )
         {
-            if (String.IsNullOrEmpty(this.HttpContext.Session.GetString("loggedUser")))
-                return RedirectToAction("Login", "Home");
-
             Project item = repo.GetFirstOrDefault(u => u.Id == id);
 
             EditVM model = new EditVM();
@@ -81,9 +79,6 @@ namespace WebApplication.Controllers
         [HttpPost]
         public IActionResult Edit(EditVM model)
         {
-            if (String.IsNullOrEmpty(this.HttpContext.Session.GetString("loggedUser")))
-                return RedirectToAction("Login", "Home");
-
             int loggedUserId = Convert.ToInt32(this.HttpContext.Session.GetString("loggedUser"));
 
             if (!ModelState.IsValid)

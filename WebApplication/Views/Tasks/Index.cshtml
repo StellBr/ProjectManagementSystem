@@ -53,8 +53,10 @@
             <div class="col-2">
                 <a href="/Tasks/Edit?id=@item.Id">edit</a>
                 <a href="/Tasks/Delete?id=@item.Id" onclick="return confirm('Delete this item?')">delete</a>
+                <a href="/Comments/Index?ParentId=@item.Id">comments</a>
             </div>
         </div>
     }
+    @{ Html.RenderPartial("/Views/Shared/PagerPartial.cshtml", Model.Pager);}
     <a href="/Projects/Index">Back</a>
 </div>

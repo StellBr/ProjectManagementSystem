@@ -7,9 +7,12 @@ using Common.Data;
 using Common.Entities;
 using Common.Repositories;
 using WebApplication.ViewModels.Tasks;
+using WebApplication.ActionFilters;
+using WebApplication.ViewModels.Shared;
 
 namespace WebApplication.Controllers
 {
+    [Authentication]
     public class TasksController : Controller
     {
         private TasksRepository repo = new TasksRepository();
@@ -17,8 +20,15 @@ namespace WebApplication.Controllers
         
         public IActionResult Index(IndexVM model)
         {
-            if (String.IsNullOrEmpty(this.HttpContext.Session.GetString("loggedUser")))
-                return RedirectToAction("Login", "Home");
+            model.Pager ??= new PagerVM();
+            model.Pager.ItemsPerPage = model.Pager.ItemsPerPage <= 0
+                                                                 ? 10
+                                                                 : model.Pager.ItemsPerPage;
+            model.Pager.Page = model.Pager.Page <= 0
+                                                 ? 1
+                                                 : model.Pager.Page;
+
+            model.Pager.PagesCount = (int)Math.Ceiling(repo.Count(t => t.ProjectId == model.ParentId) / (double)model.Pager.ItemsPerPage);
 
             model.ParentProject = projectRepo.GetFirstOrDefault(p=>p.Id==model.ParentId);
 
@@ -30,9 +40,6 @@ namespace WebApplication.Controllers
         [HttpGet]
         public IActionResult Create(int ParentId)
         {
-            if (String.IsNullOrEmpty(this.HttpContext.Session.GetString("loggedUser")))
-                return RedirectToAction("Login", "Home");
-
             CreateVM model = new CreateVM();
             model.ProjectId = ParentId;
             model.Deadline = DateTime.Now;
@@ -43,9 +50,6 @@ namespace WebApplication.Controllers
         [HttpPost]
         public IActionResult Create(CreateVM model)
         {
-            if (String.IsNullOrEmpty(this.HttpContext.Session.GetString("loggedUser")))
-                return RedirectToAction("Login", "Home");
-
             if (!ModelState.IsValid)
                 return View(model);
 
@@ -63,9 +67,7 @@ namespace WebApplication.Controllers
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            if (String.IsNullOrEmpty(this.HttpContext.Session.GetString("loggedUser")))
-                return RedirectToAction("Login", "Home");
-
+           
             Task item = repo.GetFirstOrDefault(t => t.Id == id);
        
             EditVM model = new EditVM();
@@ -81,9 +83,6 @@ namespace WebApplication.Controllers
         [HttpPost]
         public IActionResult Edit(EditVM model)
         {
-            if (String.IsNullOrEmpty(this.HttpContext.Session.GetString("loggedUser")))
-                return RedirectToAction("Login", "Home");
-
             Task item = new Task();
             item.Id = model.Id;
             item.ProjectId = model.ProjectId;
@@ -98,9 +97,6 @@ namespace WebApplication.Controllers
 
         public IActionResult Delete(int id)
         {
-            if (String.IsNullOrEmpty(this.HttpContext.Session.GetString("loggedUser")))
-                return RedirectToAction("Login", "Home");
-
             Task item = repo.GetFirstOrDefault(t => t.Id == id);
             repo.Delete(item);  
 

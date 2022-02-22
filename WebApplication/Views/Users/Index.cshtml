@@ -2,78 +2,92 @@
 @model WebApplication.ViewModels.Users.IndexVM
 @using Common.Entities
 
-<a href="/Users/Create" style="text-decoration:none; font-size:23px;" >Create a new user</a>
-<div class="grid">  
+<div class="grid">
+    <form action="/Users/Index" method="get">
         <div class="row">
             <div class="col-1">
-                Username
+                @Html.LabelFor(m => m.Filter.Username)
             </div>
             <div class="col-1">
-                First Name
+                @Html.LabelFor(m => m.Filter.FirstName)
             </div>
             <div class="col-1">
-                Last Name
+                @Html.LabelFor(m => m.Filter.LastName)
+            </div>
+            <div class="col-1">
+                @Html.LabelFor(m => m.Filter.Address)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-1">
+                @Html.EditorFor(m => m.Filter.Username)
+            </div>
+            <div class="col-1">
+                @Html.EditorFor(m => m.Filter.FirstName)
+            </div>
+            <div class="col-1">
+                @Html.EditorFor(m => m.Filter.LastName)
+            </div>
+            <div class="col-1">
+                @Html.EditorFor(m => m.Filter.Address)
+            </div>
+            <div class="col-1">
+                <input type="submit" value="Search"/>
+                <a href="/Users/Index">Clear</a>
+            </div>
+        </div>
+    </form>
+    <hr>
+    <a href="/Users/Create" style="text-decoration:none; font-size:23px;">Create a new user</a>
+    <div class="row">
+        <div class="col-1">
+            Username
+        </div>
+        <div class="col-1">
+            First Name
+        </div>
+        <div class="col-1">
+            Last Name
+        </div>
+        <div class="col-2">
+            Email
+        </div>
+        <div class="col-1">
+            Phone
+        </div>
+        <div class="col-1">
+            Address
+        </div>
+    </div>
+    <br>
+    <br>
+    @foreach (User user in Model.Items)
+    {
+        <div class="row">
+            <div class="col-1">
+                @user.Username
+            </div>
+            <div class="col-1">
+                @user.FirstName
+            </div>
+            <div class="col-1">
+                @user.LastName
             </div>
             <div class="col-2">
-                Email
+                @user.Email
             </div>
             <div class="col-1">
-                Phone
+                @user.Phone
             </div>
             <div class="col-1">
-                Address
+                @user.Address
+            </div>
+            <div class="col-2">
+                <a href="/Users/Edit?id=@user.Id">edit</a>
+                <a href="/Users/Delete?id=@user.Id" onclick="return confirm('Delete this item?')">delete</a>
             </div>
         </div>
-        <br>
-        <br>  
-        @foreach (User user in Model.Items)
-        {
-    <div class="row">
-        <div class="col-1">
-            @user.Username
-        </div>
-        <div class="col-1">
-            @user.FirstName
-        </div>
-        <div class="col-1">
-            @user.LastName
-        </div>
-        <div class="col-2">
-            @user.Email
-        </div>
-        <div class="col-1">
-            @user.Phone
-        </div>
-        <div class="col-1">
-            @user.Address
-        </div>
-        <div class="col-2">
-            <a href="/Users/Edit?id=@user.Id">edit</a>
-            <a href="/Users/Delete?id=@user.Id" onclick="return confirm('Delete this item?')">delete</a>
-        </div>
-    </div>
-        }
-    <div class="row">
-        <div class="col-3 pager">
-            <script>
-                function itemsPP_OnChange() {
-                    var control = document.getElementById("ipp");
-                    var url = "/Users/Index?ItemsPerPage=" + control.options[control.selectedIndex].value;
+    }
 
-                    window.location.href = url;
-                }
-            </script>
-            @for (int i = 1; i <= Model.PagesCount; i++)
-            {
-                <a class="@(i == Model.Page ? "b" : "")" href="/Users/Index?ItemsPerPage=@Model.ItemsPerPage&Page=@i">@i</a>
-            }
-            <select id="ipp" onchange="itemsPP_OnChange()">
-                <option @(Model.ItemsPerPage == 1 ? "selected" : "")>1</option>
-                <option @(Model.ItemsPerPage == 2 ? "selected" : "")>2</option>
-                <option @(Model.ItemsPerPage == 5 ? "selected" : "")>5</option>
-                <option @(Model.ItemsPerPage == 10 ? "selected" : "")>10</option>
-            </select>
-        </div>
-    </div>
-    
+    @{Html.RenderPartial("/Views/Shared/PagerPartial.cshtml", Model.Pager); }
 </div>

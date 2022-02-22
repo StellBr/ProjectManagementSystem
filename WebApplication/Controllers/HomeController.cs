@@ -10,6 +10,7 @@ using Common.Data;
 using Common.Entities;
 using Common.Repositories;
 using WebApplication.ViewModels.Home;
+using WebApplication.ActionFilters;
 
 namespace WebApplication.Controllers
 {
@@ -47,11 +48,9 @@ namespace WebApplication.Controllers
             return RedirectToAction("Index","Home");
         }
 
+        [Authentication]
         public IActionResult Logout()
         {
-            if (String.IsNullOrEmpty(this.HttpContext.Session.GetString("loggedUser")))
-                return RedirectToAction("Index", "Home");
-
             this.HttpContext.Session.Remove("loggedUser");
 
             return RedirectToAction("Index", "Home");
