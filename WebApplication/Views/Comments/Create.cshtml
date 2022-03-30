@@ -1,0 +1,37 @@
+﻿@model WebApplication.ViewModels.Comments.CreateVM
+
+<fieldset>
+    <legend>Add a comment</legend>
+    <form action="/Comments/Create" method="post">
+        @Html.HiddenFor(m => m.TaskId)
+     
+        <div class="grid">
+            <div class="row">
+                <div class="col-1">
+                    @Html.LabelFor(m => m.Topic)
+                </div>
+                <div class="col-2">
+                    @Html.EditorFor(m => m.Topic)
+                    @Html.ValidationMessageFor(m => m.Topic)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1">
+                    @Html.LabelFor(m => m.Content)
+                </div>
+                <div class="col-2">
+                    @Html.EditorFor(m => m.Content)
+                    @Html.ValidationMessageFor(m => m.Content)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-3">
+                    <div class="right">
+                        <input type="submit" value="Save" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+</fieldset>

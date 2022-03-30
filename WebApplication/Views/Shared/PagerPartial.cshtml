@@ -1,0 +1,38 @@
+﻿@model WebApplication.ViewModels.Shared.PagerVM
+@{ 
+    var controller = this.ViewContext.RouteData.Values["controller"];
+    var action = this.ViewContext.RouteData.Values["action"];
+
+    string queryParams = "";
+    @foreach (var key in this.Context.Request.Query.Keys) 
+    {
+        if (!key.StartsWith("Pager."))
+        {
+            queryParams += key + "=" + this.Context.Request.Query[key] + "&";
+        }
+    }
+
+    }
+
+<div class="row">
+    <div class="col-3 pager">
+        <script>
+                function itemsPP_OnChange() {
+                    var control = document.getElementById("ipp");
+                    var url = "/@(controller)/@(action)?@Html.Raw(queryParams)Pager.ItemsPerPage=" + control.options[control.selectedIndex].value;
+
+                    window.location.href = url;
+                }
+        </script>
+        @for (int i = 1; i <= Model.PagesCount; i++)
+        {
+            <a class="@(i == Model.Page ? "b" : "")" href="/@(controller)/@(action)?@Html.Raw(queryParams)Pager.ItemsPerPage=@Model.ItemsPerPage&Pager.Page=@i">@i</a>
+        }
+        <select id="ipp" onchange="itemsPP_OnChange()">
+            <option @(Model.ItemsPerPage == 1 ? "selected" : "")>1</option>
+            <option @(Model.ItemsPerPage == 2 ? "selected" : "")>2</option>
+            <option @(Model.ItemsPerPage == 5 ? "selected" : "")>5</option>
+            <option @(Model.ItemsPerPage == 10 ? "selected" : "")>10</option>
+        </select>
+    </div>
+</div>

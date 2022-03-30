@@ -1,0 +1,43 @@
+﻿@model WebApplication.ViewModels.Worklogs.EditVM
+@using Common.Entities;
+@{
+    ViewBag.Title = "Edit worklog";
+
+}
+
+<fieldset>
+    <legend>Create worklog</legend>
+    <form action="/Worklogs/Edit" method="post">  
+        @Html.HiddenFor(m=>m.Id)
+        @Html.HiddenFor(m => m.TaskId)
+        @Html.HiddenFor(m=>m.UserId)
+
+        <div class="grid">
+            <div class="row">
+                <div class="col-1">
+                    @Html.LabelFor(m => m.Hours)
+                </div>
+                <div class="col-2">
+                    @Html.EditorFor(m => m.Hours)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1">
+                    @Html.LabelFor(m => m.Description)
+                </div>
+                <div class="col-2">
+                    @Html.EditorFor(m => m.Description)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-2">
+                    <div class="right">
+                        <input type="submit" value="Edit" />
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </form>
+</fieldset>
+

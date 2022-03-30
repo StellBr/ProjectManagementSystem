@@ -1,0 +1,40 @@
+﻿@model WebApplication.ViewModels.Worklogs.CreateVM
+@using Common.Entities;
+@{
+    ViewBag.Title = "Create worklog";
+
+}
+
+<fieldset>
+    <legend>Create worklog</legend>
+    <form action="/Worklogs/Create" method="post">
+     
+        @Html.HiddenFor(m => m.TaskId)
+        <div class="grid">
+            <div class="row">
+                <div class="col-1">
+                    @Html.LabelFor(m => m.Hours)
+                </div>
+                <div class="col-2">
+                    @Html.EditorFor(m => m.Hours)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1">
+                    @Html.LabelFor(m => m.Description)
+                </div>
+                <div class="col-2">
+                    @Html.EditorFor(m => m.Description)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-2">
+                    <div class="right">
+                        <input type="submit" value="Save" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</fieldset>
+

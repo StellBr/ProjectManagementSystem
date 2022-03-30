@@ -1,0 +1,132 @@
+﻿@model WebApplication.ViewModels.Tasks.DetailsVM
+@using Common.Entities;
+
+<fieldset>
+    <legend>Task</legend>
+    <div class="grid">
+        <div class="row">
+            <div class="col-1 b">
+                Task Name
+            </div>
+            <div class=" col-3">
+                @Model.ParentTask.Title
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-1 b">
+                Task Description
+            </div>
+            <div class=" col-3">
+                @Model.ParentTask.Description
+            </div>
+        </div>
+
+    </div>
+</fieldset>
+<script>
+    window.addEventListener('load', function () {
+        selectTab('tabComments');
+    })
+
+    function selectTab(pageId) {
+        var selectedTab = document.getElementById(pageId);
+        var tabPages = document.getElementsByClassName('tabPage');
+        for (var i = 0; i < tabPages.length; i++) {
+            tabPages[i].style.display = 'none';
+        }
+        selectedTab.style.display = 'block';
+    }
+</script>
+<div class="tabControl">
+    <div class="tabControlHeader">
+        <input class="tabNavButton" type="button" onclick="selectTab('tabComments');" value="Comments" />
+        <input class="tabNavButton" type="button" onclick="selectTab('tabWorklogs');" value="Worklogs" />
+    </div>
+</div>
+<div id="tabComments" class="tabPage">
+    <h1 style="text-align:center;">Comments</h1>
+    <a href="/Comments/Create?ParentId=@Model.ParentTask.Id" class="b">Add a new comment</a>
+    <hr />
+
+    @foreach (Comment item in Model.Comments)
+    {
+        <div class="grid">
+            <div class="row">
+                <div class="col-1">
+                    @item.Owner.Username
+                </div>
+                <div class="col-2">
+                    @item.DateTime
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1 b">
+                    Topic
+                </div>
+                <div class="col-2">
+                    @item.Topic
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1 b">
+                    Content
+                </div>
+                <div class="col-2">
+                    @item.Content
+                </div>
+            </div>
+
+        </div>
+        <div class="col-2">
+            <a href="/Comments/Edit?id=@item.Id">edit</a>
+            <a href="/Comments/Delete?id=@item.Id" onclick="return confirm('Delete this item?')">delete</a>
+        </div>
+        <hr />
+
+    }
+</div>
+<div id="tabWorklogs" class="tabPage">
+    <h1 style="text-align:center;">Worklogs</h1>
+    <a href="/Worklogs/Create?ParentId=@Model.ParentTask.Id" class="b">Add a new worklog</a>
+    <hr />
+    @foreach (Worklog item in Model.Worklogs)
+    {
+        <div class="grid">
+            <div class="row">
+                <div class="col-1">
+                    @item.User.Username
+                </div>
+                <div class="col-2">
+                    @item.Date
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1 b">
+                    Working hours
+                </div>
+                <div class="col-1">
+                    @item.Hours H
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1 b">
+                    Description
+                </div>
+                <div class="col-1">
+                    @item.Description
+                </div>
+            </div>
+        </div>
+        <div class="col-2">
+            <a href="/Worklogs/Edit?id=@item.Id">edit</a>
+            <a href="/Worklogs/Delete?id=@item.Id" onclick="return confirm('Delete this item?')">delete</a>
+        </div>
+        <hr />
+    }
+</div>
+@{ Html.RenderPartial("/Views/Shared/PagerPartial.cshtml", Model.Pager);}
+<div class="btn">
+    <a href="/Tasks/Index?ParentId=@Model.ParentId">Back</a>
+</div>
+
+
