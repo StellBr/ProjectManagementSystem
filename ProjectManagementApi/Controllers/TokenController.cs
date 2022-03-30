@@ -41,7 +41,7 @@ namespace ProjectManagementApi.Controllers
                 "ulpia.tech",
                 "projectmanagement.angular.app",
                 claims,
-                expires: DateTime.UtcNow.AddMinutes(10),
+                expires: DateTime.UtcNow.AddMinutes(30),
                 signingCredentials: signingCredentials
                 );
 

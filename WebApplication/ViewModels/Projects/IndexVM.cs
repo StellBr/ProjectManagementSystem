@@ -12,6 +12,7 @@ namespace WebApplication.ViewModels.Projects
         public List<Project> Items { get; set; }
         public List<Project> sharedItems { get; set; }
         public PagerVM Pager { get; set; }
+        public FilterVM Filter { get; set; }
      
     }
 }

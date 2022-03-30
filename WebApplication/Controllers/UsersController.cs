@@ -72,7 +72,6 @@ namespace WebApplication.Controllers
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            return RedirectToAction("Login", "Home");
 
             User item = repo.GetFirstOrDefault(u => u.Id ==id);
 

@@ -9,15 +9,28 @@ namespace WebApplication.Tools
 {
     public static class SessionExtensions
     {
-        public static void Set<T>(this ISession session, string key, T value)
+        public static void Set<T>(this ISession session, string key, T value) where T : class
         {
+            if (value == null)
+            {
+                session.Remove(key);
+                return;
+            }
+
             session.SetString(key, JsonSerializer.Serialize(value));
         }
 
-        public static T Get<T>(this ISession session, string key)
+        public static T Get<T>(this ISession session, string key) where T : class
         {
-            var value = session.GetString(key);
-            return value == null ? default : JsonSerializer.Deserialize<T>(value);
+            if (!session.Keys.Contains(key))
+                return null;
+
+            string value = session.GetString(key);
+
+            if (String.IsNullOrEmpty(value))
+                return null;
+
+            return JsonSerializer.Deserialize<T>(value);
         }
     }
 }

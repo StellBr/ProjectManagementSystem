@@ -1,14 +1,30 @@
 ﻿@model WebApplication.ViewModels.Tasks.CreateVM
-
+@using Common.Entities;
+@using WebApplication.Tools;
 @{
     ViewBag.Title = "Create task";
+
 }
 
 <fieldset>
     <legend>Create task</legend>
     <form action="/Tasks/Create" method="post">
         @Html.HiddenFor(m => m.ProjectId)
+        @Html.HiddenFor(m => m.OwnerId)
         <div class="grid">
+            <div class="row">
+                <div class="col-1">
+                    @Html.LabelFor(m => m.AssigneeId)
+                </div>
+                <div class="col-1">
+                    <select name="AssigneeId">
+                        @foreach (User item in Model.Users)
+                        {
+                            <option value="@item.Id">@item.Username (@item.FirstName , @item.LastName)</option>
+                        }
+                    </select>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-1">
                     @Html.LabelFor(m => m.Title)
@@ -36,6 +52,16 @@
                     @Html.ValidationMessageFor(m => m.Title)
                 </div>
             </div>
+            <div class="row">
+                <div class="col-1">
+                    @Html.LabelFor(m => m.Status)
+                </div>
+                <div class="col-2">
+                    @Html.DropDownListFor(m => m.Status,new SelectList(Enum.GetValues(typeof(Common.Entities.Task.TaskStatus))))
+
+                </div>
+            </div>
+
             <div class="row">
                 <div class="col-3">
                     <div class="right">

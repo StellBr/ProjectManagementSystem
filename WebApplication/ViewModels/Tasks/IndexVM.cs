@@ -12,5 +12,6 @@ namespace WebApplication.ViewModels.Tasks
         public int ParentId { get; set; }
         public Project ParentProject { get; set; } 
         public PagerVM Pager { get; set; }
+        public FilterVM Filter { get; set; }
     }
 }

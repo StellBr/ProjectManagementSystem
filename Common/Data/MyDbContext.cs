@@ -15,6 +15,7 @@ namespace Common.Data
         public DbSet<Task> Tasks { get; set; }
         public DbSet<UserToProject> UserToProjects { get; set; }
         public DbSet<Comment> Comments { get; set; }
+        public DbSet<Worklog> Worklogs { get; set; }
 
         public MyDbContext()
         {
@@ -23,6 +24,7 @@ namespace Common.Data
             this.Tasks = this.Set<Task>();
             this.UserToProjects = this.Set<UserToProject>();
             this.Comments = this.Set<Comment>();
+            this.Worklogs = this.Set<Worklog>();
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

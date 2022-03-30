@@ -1,4 +1,5 @@
 ﻿@model WebApplication.ViewModels.Tasks.EditVM
+@using Common.Entities;
 @{
     ViewBag.Title = "Edit";
 }
@@ -8,7 +9,21 @@
     <form action="/Tasks/Edit" method="post">
         @Html.HiddenFor(m=>m.Id)
         @Html.HiddenFor(m=>m.ProjectId)
+        @Html.HiddenFor(m=>m.OwnerId)
         <div class="grid">
+            <div class="row">
+                <div class="col-1">
+                    @Html.LabelFor(m => m.AssigneeId)
+                </div>
+                <div class="col-1">
+                    <select name="AssigneeId">
+                        @foreach (User item in Model.Users)
+                        {
+                            <option value="@item.Id ">@item.Username (@item.FirstName , @item.LastName)</option>
+                        }
+                    </select>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-1">
                     @Html.LabelFor(m => m.Title)
@@ -20,27 +35,36 @@
             </div>
             <div class="row">
                 <div class="col-1">
-                    @Html.LabelFor(m=>m.Description)
+                    @Html.LabelFor(m => m.Description)
                 </div>
                 <div class="col-2">
-                    @Html.EditorFor(m=>m.Description)
-                    @Html.ValidationMessageFor(m=>m.Description)
+                    @Html.EditorFor(m => m.Description)
+                    @Html.ValidationMessageFor(m => m.Description)
                 </div>
             </div>
             <div class="row">
                 <div class="col-1">
-                    @Html.LabelFor(m=>m.Deadline)
+                    @Html.LabelFor(m => m.Deadline)
                 </div>
                 <div class="col-2">
-                    @Html.EditorFor(m=>m.Deadline)
-                    @Html.ValidationMessageFor(m=>m.Deadline)
+                    @Html.EditorFor(m => m.Deadline)
+                    @Html.ValidationMessageFor(m => m.Deadline)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1">
+                    @Html.LabelFor(m => m.Status)
+                </div>
+                <div class="col-2">
+                    @Html.DropDownListFor(m => m.Status, new SelectList(Enum.GetValues(typeof(Common.Entities.Task.TaskStatus))), "-")
+
                 </div>
             </div>
             <div class="row">
                 <div class="col-2">
                     <div class="right">
                         <a href="/Tasks/Index?ParentId=@Model.ProjectId">Back</a>
-                        <input type="submit" value="Save"/>
+                        <input type="submit" value="Save" />
                     </div>
                 </div>
             </div>

@@ -1,33 +1,52 @@
 ﻿
 @model WebApplication.ViewModels.Projects.IndexVM
-@using Common.Entities;
+@using Common.Entities
+@{
+  //  User loggedUser = this.ViewContext.HttpContext.Session.Get<User>("loggedUser");
+}
 
 <h1>Projects</h1>
 <a href="/Projects/Create">Create a new project</a>
 
+
 <div class="grid">
-   
+    <form action="/Projects/Index" method="get">
         <div class="row">
             <div class="col-1">
-                Project Title
+                @Html.LabelFor(m => m.Filter.Title)
+            </div>
+            <div class="col-1">
+                @Html.EditorFor(m => m.Filter.Title)
+            </div>
+            <div class="col-1">
+                <input type="submit" value="Search" />
+                <a href="/Projects/Index">Clear</a>
             </div>
         </div>
-        <br />
-        @foreach (Project prj in Model.Items)
-        {
-            <div class="row">
-                <div class="col-1">
-                    @prj.Title
-                </div>
-                <div class="col-1">
-                    <a href="/Projects/Share?id=@prj.Id">share</a>
-                    <a href="/Projects/Edit?id=@prj.Id">edit</a>
-                    <a href="/Projects/Delete?id=@prj.Id" onclick="return confirm('Delete this item?')">delete</a>
-                    <a href="/Tasks/Index?ParentId=@prj.Id">tasks</a>
-                </div>
+    </form>
+    <div class="row">
+        <div class="col-1">
+            Project Title
+        </div>
+    </div>
+    <br />
+    @foreach (Project item in Model.Items)
+    {
+        <div class="row">
+            <div class="col-1">
+                @item.Title
             </div>
-        }
+            <div class="col-1">
+              @*  //@if (item.OwnerId == loggedUser.Id) { *@
+                <a href="/Projects/Share?id=@item.Id">share</a>
+                <a href="/Projects/Edit?id=@item.Id">edit</a>
+                <a href="/Projects/Delete?id=@item.Id" onclick="return confirm('Delete this item?')">delete</a> 
+                |
+                <a href="/Tasks/Index?ParentId=@item.Id">tasks</a>
+            </div>
+        </div>
+    }
 
-   @{ Html.RenderPartial("/Views/Shared/PagerPartial.cshtml", Model.Pager);}
+    @{ Html.RenderPartial("/Views/Shared/PagerPartial.cshtml", Model.Pager);}
 </div>
 

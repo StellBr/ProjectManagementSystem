@@ -18,26 +18,31 @@ namespace WebApplication.Controllers
     {
         private ProjectsRepository repo = new ProjectsRepository();
         private UserToProjectsRepository upRepo = new UserToProjectsRepository();
+
         public IActionResult Index(IndexVM model)
         {
             int loggedUserId = Convert.ToInt32(this.HttpContext.Session.GetString("loggedUser"));
 
-             model.Pager ??= new PagerVM();
+            model.Filter ??= new FilterVM();
+            model.Pager ??= new PagerVM();
 
-             model.Pager.ItemsPerPage = model.Pager.ItemsPerPage <= 0 
-                                                                    ? 5
-                                                                    : model.Pager.ItemsPerPage;
-             model.Pager.Page = model.Pager.Page <= 0 
-                                                    ? 1 
-                                                    : model.Pager.Page;
+            model.Pager.ItemsPerPage = model.Pager.ItemsPerPage <= 0
+                                                                   ? 10
+                                                                   : model.Pager.ItemsPerPage;
+            model.Pager.Page = model.Pager.Page <= 0
+                                                   ? 1
+                                                   : model.Pager.Page;
+            model.Filter.UserId = loggedUserId;
+            model.Filter.SharedProjectIds = upRepo.GetAll<int>(i => i.UserId == loggedUserId)
+                                                  .Select(i => i.ProjectId).ToList();
+            var filter = model.Filter.GetFilter();
 
-             model.Pager.PagesCount = (int) Math.Ceiling(repo.Count(i=>i.OwnerId == loggedUserId) / (double)model.Pager.ItemsPerPage);
+            model.Pager.PagesCount = (int)Math.Ceiling(repo.Count(filter) / (double)model.Pager.ItemsPerPage);
+           
+            model.Items = repo.GetAll<int>(filter, null, model.Pager.Page, model.Pager.ItemsPerPage);
 
-             model.Items = repo.GetAll<int>(i=>i.OwnerId==loggedUserId, null, model.Pager.Page, model.Pager.ItemsPerPage);
 
-             model.Items.AddRange(upRepo.GetAll<int>(i => i.UserId == loggedUserId)
-                                        .Select(i => i.Project));         
-             return View(model);
+            return View(model);
         }
 
         [HttpGet]

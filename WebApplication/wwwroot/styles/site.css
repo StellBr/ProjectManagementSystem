@@ -18,38 +18,45 @@
         margin: 0px 10px;
     }
 
+
         .menu ul li a {
             text-decoration: none;
-            color: blue;
+            color: white;
+            font-size: 16px;
+            background-color: #9398b8;
+            padding: 10px;
+            border-radius: 5px;
         }
 
-.tabControl {
-    margin: 20px 0;
-    display: inline-block;
-    border: 1px solid black;
-}
-
     .tabControl .tabControlHeader {
-        display: block;
-        background-color: lightgrey;
+
+        width: 30%;
     }
 
     .tabControl .tabNavButton {
         border: none;
-        background-color: lightgrey;
-        height: 25px;
-        width: 70px;
-        padding: 0;
-        margin: 0
+        height: 30px;
+        width: 80%;
+        padding: 5px;
+        margin: 10px;
+        margin-right: 30px;
+        font-size: 14.5px;
     }
 
-    .tabControl .tabPage {
-        display: block;
-    }
+input.tabNavButton {
+    background-color: #9398b8;
+    color: white;
+}
+
+.tabControl .tabPage {
+    display: block;
+}
 
 .grid {
     display: inline-block;
     width: 100%;
+    margin: 12px;
+    padding: 5px;
 }
 
     .grid input[type=text] {
@@ -64,13 +71,11 @@
         display: inline-block;
         width: 100%;
         margin: 2px 0px;
-      
     }
 
         .grid .row .col-1 {
             float: left;
             width: 150px;
-         
         }
 
         .grid .row .col-2 {
@@ -101,4 +106,27 @@
 
 .b {
     font-weight: bold;
+}
+
+btn {
+    margin: 5px;
+    padding: 10px;
+    text-decoration: none;
+    color: blue;
+    font-size: 15px;
+}
+
+fieldset {
+    margin: 12px;
+}
+
+.far {
+    color: #616791;
+}
+
+.fa {
+    color: #616791;
+}
+div#tabComments {
+    width: 100%;
 }

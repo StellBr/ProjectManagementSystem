@@ -1,6 +1,5 @@
 ﻿@model WebApplication.ViewModels.Tasks.IndexVM
 
-
 <fieldset>
     <legend>PROJECT</legend>
     <div class="grid">
@@ -15,10 +14,36 @@
     </div>
 </fieldset>
 
-<a href="/Tasks/Create?ParentId=@Model.ParentProject.Id">Add a new task</a>
-<br />
 
 <div class="grid">
+    <form action="/Tasks/Index" method="get">
+        @Html.HiddenFor(m => m.ParentId)
+        <div class="row">
+            <div class="col-1">
+                @Html.LabelFor(m => m.Filter.Title)
+            </div>
+            <div class="col-1">
+                @Html.EditorFor(m => m.Filter.Title)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-1">
+                @Html.LabelFor(m => m.Filter.AssigneeId)
+            </div>
+            <div class="col-1">
+                @Html.DropDownListFor(m => m.Filter.AssigneeId, Model.Filter.Assignees, "-")
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-1">
+                <input type="submit" value="Search" />
+                <a href="/Tasks/Index?ParentId=@Model.ParentId">Clear</a>
+            </div>
+        </div>
+    </form>
+
+    <a href="/Tasks/Create?ParentId=@Model.ParentProject.Id">Add a new task</a>
+    <hr />
     <div class="row">
         <div class="col-1" margin: 10px;">
             Project Tasks
@@ -30,11 +55,17 @@
         <div class="col-1">
             Task Title
         </div>
-        <div class="col-3">
+        <div class="col-2">
             Task Description
         </div>
         <div class="col-2">
             Task Deadline
+        </div>
+        <div class="col-2">
+            Assigneed User
+        </div>
+        <div class="col-2">
+            Task Status
         </div>
     </div>
 
@@ -44,16 +75,22 @@
             <div class="col-1">
                 @item.Title
             </div>
-            <div class="col-3">
+            <div class="col-2">
                 @item.Description
             </div>
             <div class="col-2">
                 @item.Deadline
             </div>
             <div class="col-2">
+                @item.Assignee.Username (@item.Assignee.FirstName @item.Assignee.LastName)
+            </div>
+            <div class="col-2">
+                @item.Status
+            </div>
+            <div class="col-2">
                 <a href="/Tasks/Edit?id=@item.Id">edit</a>
                 <a href="/Tasks/Delete?id=@item.Id" onclick="return confirm('Delete this item?')">delete</a>
-                <a href="/Comments/Index?ParentId=@item.Id">comments</a>
+                <a href="/Tasks/Details?ParentId=@item.Id">details</a>
             </div>
         </div>
     }
